@@ -86,7 +86,7 @@ class AdminGroupController extends AbstractController
         }
         $collection = $this->collectionRepository->findOneBy(['id'=>$data['collection']]);
         $group = $this->groupTomeRepository->findOneBy(['id'=>$data['group']]);
-        $tomeExist = $this->tomeRepository->findBy(['name'=>$nameTome,'collectionLibrary'=>$collection,'groupTome'=>$group]);
+        $tomeExist = $this->tomeRepository->findBy(['name'=>$nameTome,'collectionLibrary'=>$collection]);
         if ($tomeExist) {
             return $this->json(['message'=>'Ce tome existe déjà pour cette collection'], 400);
         }

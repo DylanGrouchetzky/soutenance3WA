@@ -31,10 +31,6 @@ class ViewCategoryController extends AbstractController
             $this->addFlash('error','Impossible de trouver la catégorie sélectionner');
             return $this->redirectToRoute('home');
         }
-        $collections = $this->collectionRepository->findBy(['categoryCollection'=>$category],['name'=>'ASC'],$this->params->get('limit_pagination'),$start);
-        if (count($collections) == 0 ) { return $this->redirectToRoute('category',['slugCategory'=>$slugCategory]); }
-        $nextCollections = $this->collectionRepository->findBy(['categoryCollection'=>$category],['name'=>'ASC'],1,$start + $this->params->get('limit_pagination'));
-        $numberPaginations =  ceil(count($this->collectionRepository->findBy(['categoryCollection'=>$category])) / $this->params->get('limit_pagination'));
         $searchForm = $this->createForm(SearchType::class);
         $searchForm->handleRequest($request);
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
@@ -45,6 +41,20 @@ class ViewCategoryController extends AbstractController
                 'genreSearch' => $data[2],
             ]); 
         }
+        $hashCollectionExist = $this->collectionRepository->findBy(['categoryCollection'=>$category]);
+        if (!$hashCollectionExist) {
+            return $this->render('frontend/pages/category_view.html.twig',[
+                'category'=>$category,
+                'collections'=>$hashCollectionExist,
+                'searchForm'=>$searchForm->createView(),
+                'nextCollections'=>null,
+                'start'=>0
+            ]);
+        }
+        $collections = $this->collectionRepository->findBy(['categoryCollection'=>$category],['name'=>'ASC'],$this->params->get('limit_pagination'),$start);
+        if (count($collections) == 0 ) { return $this->redirectToRoute('category',['slugCategory'=>$slugCategory]); }
+        $nextCollections = $this->collectionRepository->findBy(['categoryCollection'=>$category],['name'=>'ASC'],1,$start + $this->params->get('limit_pagination'));
+        $numberPaginations =  ceil(count($this->collectionRepository->findBy(['categoryCollection'=>$category])) / $this->params->get('limit_pagination'));
         return $this->render('frontend/pages/category_view.html.twig',[
             'category'=>$category,
             'collections'=>$collections,
