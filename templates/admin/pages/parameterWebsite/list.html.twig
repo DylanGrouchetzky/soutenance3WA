@@ -1,0 +1,57 @@
+{% extends "admin/template.html.twig" %}
+{% block title %}- Paramétre{% endblock %}
+{% block body %}
+<main>
+    {% include "admin/_partials/_block_alert.html.twig" %}
+    <section class="hero-section">
+        <h1>Gestion des Paramétres</h1>
+    </section>
+    {{form_start(form)}}
+        <div class="container-input">
+            <div class="d-column">
+                {{form_label(form.nameWebsite)}}
+                {{form_widget(form.nameWebsite)}}
+            </div>
+            <div class="d-column">
+                {{form_label(form.linkFacebook)}}
+                {{form_widget(form.linkFacebook)}}
+            </div>
+            <div class="d-column">
+                {{form_label(form.linkInstagram)}}
+                {{form_widget(form.linkInstagram)}}
+            </div>
+        </div>
+        <div class="container-input">
+            <div class="d-column">
+                {{form_label(form.imgHeroSectionHome)}}
+                {{form_widget(form.imgHeroSectionHome)}}
+                {% if fileExists(parameterWebsite.imgHeroSectionHome) and parameterWebsite.imgHeroSectionHome is not null %}
+                    <img src="{{asset('uploads/' ~ parameterWebsite.imgHeroSectionHome)}}" alt="Bandeau de la hero-section" class="img-edit-collection" decoding="auto">
+                {% else %}
+                    <p>Il n'y a pas encore de bandeau pour la hero-section</p>
+                {% endif %}
+            </div>
+            <div class="d-column">
+                {{form_label(form.logoWebsite)}}
+                {{form_widget(form.logoWebsite)}}
+                {% if fileExists(parameterWebsite.logoWebsite) and parameterWebsite.logoWebsite is not null %}
+                    <img src="{{asset('uploads/' ~ parameterWebsite.logoWebsite)}}" alt="Logo du site web" class="img-edit-collection" decoding="auto">
+                {% else %}
+                    <p>Il n'y a pas encore de logo pour ce site</p>
+                {% endif %}
+            </div>
+            <div class="d-column">
+                {{form_label(form.emailContact)}}
+                {{form_widget(form.emailContact)}}
+            </div>
+        </div>
+        <div class="d-column mb-1">
+            {{form_label(form.textDetailWebsite)}}
+            {{form_widget(form.textDetailWebsite)}}
+        </div>
+        <button type="submit" class="btn btn-green">
+            <i class="feather-save"></i> Enregistré
+        </button>
+    {{form_end(form)}}
+</main>
+{% endblock %}

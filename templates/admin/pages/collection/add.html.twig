@@ -1,0 +1,44 @@
+{% extends "admin/template.html.twig" %}
+{% block title %}- Collection{% endblock %}
+{% block body %}
+<main>
+    <section class="hero-section">
+        <h1>Ajout d'une collection</h1>
+        <a href="{{path('admin_collection_list',{'slugCategory':category.slug})}}" class="btn btn-blue" id="btn-return"><i class=" feather-arrow-left"></i> Retour</a>
+    </section>
+    {{form_start(collectionForm)}}
+        <div class="container-input">
+            <div class="d-column">
+                {{form_label(collectionForm.name)}}
+                {{form_widget(collectionForm.name)}}
+            </div>
+            <div class="d-column">
+                {{form_label(collectionForm.status)}}
+                {{form_widget(collectionForm.status)}}
+            </div>
+            <div class="d-column">
+                {{form_label(collectionForm.genreCollection)}}
+                {{form_widget(collectionForm.genreCollection)}}
+            </div>
+        </div>
+        <div class="d-column mb-1">
+            {{form_label(collectionForm.description)}}
+            {{form_widget(collectionForm.description)}}
+        </div>
+        <div class="container-input mb-2">
+            <div class="d-column">
+                {{form_label(collectionForm.picture)}}
+                {{form_widget(collectionForm.picture)}}
+            </div>
+            <div class="d-column">
+                {{form_label(collectionForm.bgPicture)}}
+                {{form_widget(collectionForm.bgPicture)}}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-green">
+            <i class="feather-save"></i> Enregistré
+        </button>
+    {{form_end(collectionForm)}}
+</main>
+{% endblock %}
+{% block addJS %} <script src={{asset('admin/js/collection.js')}} defer></script> {% endblock %}

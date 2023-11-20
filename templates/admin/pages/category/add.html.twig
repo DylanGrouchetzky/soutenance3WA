@@ -1,0 +1,24 @@
+{% extends "admin/template.html.twig" %}
+{% block title %}- Catégorie{% endblock %}
+{% block body %}
+<main>
+    <section class="hero-section">
+        <h1>Ajout d'une Catégrie</h1>
+        <a href="{{path('admin_category_list')}}" class="btn btn-blue" id="btn-return"><i class=" feather-arrow-left"></i> Retour</a>
+    </section>
+    {{form_start(formCategory)}}
+        <div class="d-column">
+            {{form_label(formCategory.name)}}
+            {{form_widget(formCategory.name)}}
+        </div>
+        <div class="d-column mb-2">
+            {{form_label(formCategory.picture)}}
+            {{form_widget(formCategory.picture)}}
+        </div>
+        <button type="submit" class="btn btn-green">
+            <i class="feather-save"></i> Enregistré
+        </button>
+    {{form_end(formCategory)}}
+</main>
+{% endblock %}
+{% block addJS %} <script src={{asset('admin/js/category.js')}} defer></script> {% endblock %}

@@ -1,0 +1,13 @@
+<div class="p-1">
+    <a href="{{path('detail',{'slugCategory':category.slug,'slugCollection':collection.slug})}}">
+        <div class="card">
+            {% if fileExists(collection.picture) and collection.picture is not null %}
+                <img src="{{asset('uploads/' ~ collection.picture)}}" alt="image de présentation {{collection.name}}" class="img-present-collection" decoding="auto">
+            {% else %}
+                <img src="{{asset('img/tome-default.webp')}}" alt="image de présentation {{collection.name}}" class="img-present-collection" decoding="auto">
+            {% endif %}
+            <h3 class="title-card-collection">{{ collection.name }}</h3>
+            <span class="btn btn-crimson"><i class="feather-eye"></i> Détail</span>
+        </div>
+    </a>
+</div>

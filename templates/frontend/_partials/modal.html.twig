@@ -1,0 +1,16 @@
+<div id="modal" class="d-none modal-container">
+    <div class="modal-text">
+        <div class="d-flex justify-space-between">
+            <h3>Vous avez besoin d'un compte pour l'utilisation d'ajout de tome</h3>
+            <button class="btn btn-red" onclick="closeModal()"><i class="feather-x"></i></button>
+        </div>
+        <p>
+            Ajoutez des titres à votre collection personnel. 
+            Vous pouvez également accéder à l'ensemble de votre collection depuis n'importe quel appareil : mobile, Web ou tablette.
+        </p>
+        <div class="d-flex justify-space-evenly">
+            <a href="{{path('app_register')}}" class="btn btn-green mx-1">Inscription</a>
+            <a href="{{path('app_login')}}" class="btn btn-green">Connexion</a>
+        </div>
+    </div>
+</div>

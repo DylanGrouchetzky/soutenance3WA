@@ -1,0 +1,30 @@
+{% extends "frontend/template.html.twig" %}
+{% block body %}
+<section class="bg-connect d-flex justify-end align-end">
+    <h1>Inscription</h1>
+</section>
+<section  class="container-login">
+    <img src="{{asset('img/img-conect.webp')}}" alt="image de gauche pour inscription" class="img-connect">
+    <div>
+        <h2>Inscrivez vous à Super Collect</h2>
+        {{ form_start(registrationForm) }}
+            <div class="group-form">
+                {{ form_label(registrationForm.email) }}
+                {{ form_widget(registrationForm.email) }}
+                <div class="text-red text-bold">{{ form_errors(registrationForm.email) }}</div>
+            </div>
+            <div class="group-form">
+                {{ form_label(registrationForm.plainPassword) }}
+                {{ form_widget(registrationForm.plainPassword) }}
+                <div class="text-red text-bold">{{ form_errors(registrationForm.plainPassword) }}</div>
+            </div>
+            <small>
+                Vos données sont traitées par {{parameterWebsite.nameWebsite}} pour vous permettre un bon fonctionnement du site. 
+                Les données (*) sont obligatoires. 
+            </small>
+            {{ form_row(registrationForm.agreeTerms) }}
+            <button type="submit" class="btn btn-green my-2  pulse-button">Inscription</button>
+        {{ form_end(registrationForm) }}
+    </div>
+</section>
+{% endblock %}

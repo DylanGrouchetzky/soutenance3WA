@@ -1,0 +1,131 @@
+{% extends "frontend/template.html.twig" %}
+{% block title %} - {{collection.name}}{% endblock %}
+{% set descriptionMeta = "Ici vous pouvez retrouver tous les détails que nous avons sur une œuvre en particulier.Nos données sur les œuvres sont ajouté ou mise à jour pour que les informations soient le plus précise possible." %}
+{% block meta %}
+    <meta name="description" content="{{descriptionMeta}}">
+    <meta property="og:description" content="{{descriptionMeta}}">
+    <meta property="og:title" content="{{parameterWebsite.nameWebsite}} - {{collection.name}}">
+{% endblock %}
+{% block body %}
+{% if fileExists(collection.bgPicture) and collection.bgPicture is not null %}
+    <section class="bg-detail" style="background-image: url('{{asset('uploads/' ~ collection.bgPicture)}}')">
+{% else %}
+    <section class="bg-detail">
+{% endif %}
+        <h1>{{collection.name}}</h1>
+    </section>
+    <main>
+        <nav class="breadcrumb"><a href="{{path('home')}}" class="breadcrumb-link">Accueil</a> / <a href="{{path('category',{'slugCategory':category.slug})}}" class="breadcrumb-link">{{category.name}}</a> / {{collection.name}}</nav>
+        <section class="d-flex container column-response p-0">
+            {% if fileExists(collection.picture) and collection.picture is not null %}
+                <img src="{{asset('uploads/' ~ collection.picture)}}" alt="image de {{collection.name}}" class="img-detail">
+            {% else %}
+                <img src="{{asset('img/tome-default.webp')}}" alt="image de {{collection.name}}" class="img-detail">
+            {% endif %}
+            <section class="information-collection">
+                <div>
+                    <div class="line-information-collection">
+                        {% include "frontend/_partials/_status_collection.html.twig" with {'status':collection.status} %}
+                         <div class="border-information-collection {% if collection.numberTome >= 1 %} border-collection-complet {% else %} border-collection-wait {% endif %}">
+                            <p>{{collection.numberTome}} Tome{% if collection.numberTome > 1 %}s{% endif %}</p>
+                        </div>
+                        {% if app.user %}
+                            {% include "frontend/_partials/_status_tome_user.html.twig" with {'numberTomeUser':getNumberTomeUser(app.user,collection),'numberTomeCollection':collection.numberTome} %}
+                            {% include "frontend/_partials/_status_tome_user_read.html.twig" with {'numberTomeUserRead':getNumberTomeUserRead(app.user,collection),'numberTomeCollection':collection.numberTome} %}
+                        {% endif %}
+                    </div>
+                    <div class="line-information-collection my-2">
+                        {% for genre in collection.genreCollection %}
+                            <a href="{{path('search_collection_genre',{'slugCategory':category.slug,'slugGenre':genre.slug})}}" class="badge badge-red">{{genre.name}}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <p> {{collection.description}} </p>
+            </section>
+        </section>  
+        <section class="container">
+            <div class="container-tomes">
+                {% include "frontend/_partials/_alert_message.html.twig" %}
+                {% if collection.tomeCollections|length > 0 %}
+                    {% for tome in collection.tomeCollections %}
+                        {% if tome.groupTome is null %}
+                            <div class="container-tome">
+                                <p class="title-tome">{{tome.name}}</p>
+                                    <div class="d-flex">
+                                 {% if app.user %}
+                                            {% if userHasTome(app.user,collection,tome) %}
+                                                <button onclick="addTome('{{tome.slug}}','{{collection.slug}}','{{category.slug}}','{{tome.id}}')" id="{{tome.id}}" class="btn btn-small btn-red"><i class="feather-minus-circle"></i> Enlever</button>
+                                            {% else %}
+                                                <button onclick="addTome('{{tome.slug}}','{{collection.slug}}','{{category.slug}}','{{tome.id}}')" id="{{tome.id}}" class="btn btn-small btn-green"><i class="feather-plus-circle"></i> Ajouter</button>
+                                            {% endif %}
+                                            
+                                            {% if userHasTomeRead(app.user,collection,tome) %}
+                                                <button onclick="addTomeLu('{{tome.slug}}','{{collection.slug}}','{{category.slug}}','{{tome.id}}')" id="lu-{{tome.id}}" class="btn btn-small btn-green mx-1"><i class="feather-check-circle"></i> Lu</button>
+                                            {% else %}
+                                                <button onclick="addTomeLu('{{tome.slug}}','{{collection.slug}}','{{category.slug}}','{{tome.id}}')" id="lu-{{tome.id}}" class="btn btn-small btn-gray mx-1"><i class="feather-check-circle"></i> A Lire</button>
+                                            {% endif %}
+                                        {% else %}
+                                            <button onclick="openModal()" id="{{tome.id}}" class="btn btn-small btn-green"><i class="feather-plus-circle"></i> Ajouter</button>
+                                            <button onclick="openModal()" id="lu-{{tome.id}}" class="btn btn-small btn-gray mx-1"><i class="feather-check-circle"></i> A Lire</button>
+                                        {% endif %}
+                                    </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p>Il n'y a pas encore de tome enregistré pour cette collection</p>
+                {% endif %}
+            </div>
+        </section>
+        {% if collection.groupTomes|length > 0 %}
+            <section class="container">
+                {% for group in collection.groupTomes %}
+                    {% if group.tomeCollection|length > 0 %}
+                        <h2>{{group.name}}</h2>
+                        <div class="container-tomes mb-2">
+                            {% for tome in group.tomeCollection %}
+                                <div class="container-tome">
+                                    <p class="title-tome">{{tome.name}}</p>
+                                        <div class="d-flex">
+                                        {% if app.user %}
+                                            {% if userHasTome(app.user,collection,tome) %}
+                                                <button onclick="addTome('{{tome.slug}}','{{collection.slug}}','{{category.slug}}','{{tome.id}}')" id="{{tome.id}}" class="btn btn-small btn-red"><i class="feather-minus-circle"></i> Enlever</button>
+                                            {% else %}
+                                                <button onclick="addTome('{{tome.slug}}','{{collection.slug}}','{{category.slug}}','{{tome.id}}')" id="{{tome.id}}" class="btn btn-small btn-green"><i class="feather-plus-circle"></i> Ajouter</button>
+                                            {% endif %}
+                                            
+                                            {% if userHasTomeRead(app.user,collection,tome) %}
+                                                <button onclick="addTomeLu('{{tome.slug}}','{{collection.slug}}','{{category.slug}}','{{tome.id}}')" id="lu-{{tome.id}}" class="btn btn-small btn-green mx-1"><i class="feather-check-circle"></i> Lu</button>
+                                            {% else %}
+                                                <button onclick="addTomeLu('{{tome.slug}}','{{collection.slug}}','{{category.slug}}','{{tome.id}}')" id="lu-{{tome.id}}" class="btn btn-small btn-gray mx-1"><i class="feather-check-circle"></i> A Lire</button>
+                                            {% endif %}
+                                        {% else %}
+                                            <button onclick="openModal()" id="{{tome.id}}" class="btn btn-small btn-green"><i class="feather-plus-circle"></i> Ajouter</button>
+                                            <button onclick="openModal()" id="lu-{{tome.id}}" class="btn btn-small btn-gray mx-1"><i class="feather-check-circle"></i> A Lire</button>
+                                        {% endif %}
+                                        </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </section>
+        {% endif %}
+        {% if moreCollection > 0 %}
+            <section class="container">
+                <h2>Vous aimerez peut-être aussi</h2>
+                <div class="container-card-collection">
+                    {% for collection in moreCollection %}
+                        {% include "frontend/_partials/_card_collection.html.twig" with {'collection':collection,'category':category} %}
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </main>
+    {% include "frontend/_partials/modal.html.twig" %}
+{% endblock %}
+{% block addJS %}
+    <script src="{{asset('frontend/js/modal.js')}}" defer></script>
+    <script src="{{asset('frontend/js/addTome.js')}}" defer></script>
+    <script src="{{asset('frontend/js/addTomeLu.js')}}" defer></script>
+{% endblock %}

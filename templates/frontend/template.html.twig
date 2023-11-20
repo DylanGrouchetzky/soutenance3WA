@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="robots" content="index, follow">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name='subject' content='Gestion de collection'>
+        <meta name='copyright' content='Dylan GROUCHETZKY'>
+        <meta property="og:locale" content="fr_FR">
+        <meta property="og:type" content="website">
+        {% set parameterWebsite = getParams() %}
+        <meta property="og:site_name" content="{{parameterWebsite.nameWebsite}}">
+        {% block meta %}{% endblock %}
+        <link rel="stylesheet" href="{{asset('frontend/css/feather.css')}}">
+        <link rel="stylesheet" href="{{asset('frontend/css/style.min.css')}}">
+        <link rel="icon" type="image/x-icon" href="{{asset(getLogo(parameterWebsite.logoWebsite))}}">
+        <title>{{parameterWebsite.nameWebsite}} {% block title %}{% endblock %}</title>
+    </head>
+    <body>
+        {% set categories = getCategoryList() %}
+        {% include "frontend/_partials/header.html.twig" %}
+        {% block body %}{% endblock %}
+        {% include "frontend/_partials/footer.html.twig" %}
+        {% block addJS %}{% endblock %}
+    </body>
+</html>

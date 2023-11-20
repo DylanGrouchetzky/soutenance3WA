@@ -1,0 +1,18 @@
+{% extends "admin/template.html.twig" %}
+{% block body %}
+    <main>
+        <h1>Information général</h1>
+        <section class="container-info">
+            {% for info in infos %}
+                {% include "admin/_partials/_block_info.html.twig" with {'numberInfo':info['number'],'textInfo':info['name']} %}
+            {% endfor %}
+        </section>
+        {% for categoryInfo in infoForCategory %}
+            <h2>{{categoryInfo['name']}}</h2>
+            <section class="container-info">
+                {% include "admin/_partials/_block_info.html.twig" with {'numberInfo':categoryInfo[0]['numberCollection'],'textInfo':'nombre de collection'} %}
+                {% include "admin/_partials/_block_info.html.twig" with {'numberInfo':categoryInfo[0]['numberTome'],'textInfo':'nombre de tome'} %}
+            </section>
+        {% endfor %}
+    </main>
+{% endblock %}

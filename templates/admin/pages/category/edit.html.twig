@@ -1,0 +1,64 @@
+{% extends "admin/template.html.twig" %}
+{% block title %}- Catégorie{% endblock %}
+{% block body %}
+<main>
+    {% include "admin/_partials/_block_alert.html.twig" %}
+    <section class="hero-section">
+        <h1>Editer une Catégrie</h1>
+        <a href="{{path('admin_category_list')}}" class="btn btn-blue" id="btn-return"><i class=" feather-arrow-left"></i> Retour</a>
+    </section>
+    {{form_start(formCategory)}}
+        <div class="d-flex">
+            {{form_label(formCategory.name)}}
+            {{form_widget(formCategory.name)}}
+        </div>
+        <div class="d-column mb-2">
+            {{form_label(formCategory.picture)}}
+            {{form_widget(formCategory.picture)}}
+            {% if fileExists(category.picture) and category.picture is not null %}
+                <img src="{{asset('uploads/' ~ category.picture)}}" alt="image de {{collection.name}}" class="img-edit-collection" decoding="auto">
+            {% else %}
+                <p>Il n'y a pas encore d'image de présentation pour cette categorie</p>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-green">
+            <i class="feather-save"></i> Enregistré
+        </button>
+    {{form_end(formCategory)}}
+    <section>
+        <h2>Les genres associés</h2>
+        <section style="overflow-x:scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="fx-13">Nom</th>
+                        <th class="fx-13 d-responsive-none">Ajouter le</th>
+                        <th class="fx-13 d-responsive-none">Modifier le</th>
+                        <th class="fx-13" width="30%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for genre in category.genreCollections|sort((a, b) => a.name <=> b.name) %}
+                        <tr>
+                            <td class="text-capitalize" id="{{genre.id}}">{{ genre.name }}</td>
+                            <td class="d-responsive-none">{{ genre.dateCreate|date('d/m/Y') }}</td>
+                            <td class="d-responsive-none">{{ genre.dateModifie|date('d/m/Y') }}</td>
+                            <td class="justify-end d-flex" id="btn-action-{{genre.id}}">
+                                <button onclick="editGenre('{{genre.id}}','{{genre.name}}','{{category.id}}')" class="btn btn-edit"><i class="feather-edit-2"></i> <span class="d-responsive-none">Editer</span></button>
+                                <a href="{{path('admin_genre_delete',{'idCategory':category.id,'idGenre':genre.id})}}" onclick="return confirm('Vous voulez vraiment supprimer ce genre?')" class="btn btn-red"><i class="feather-trash-2"></i> <span class="d-responsive-none">Supprimer</span></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                        <tr id="formNewGenre">
+                            <td><input type="text" id="nameNewGenre"><input type="hidden" value="{{category.id}}" id="idCategory"></td>
+                            <td colspan="2" class="d-responsive-none"></td>
+                            <td class="text-right"><button id="addGenre" class="btn btn-green"><i class="feather-save"></i> Enregistré</button></td>
+                        </tr>
+                </tbody>
+            </table>
+        </section>
+        <p id="erreurAddGenre" class="text-red"></p>
+    </section>
+</main>
+{% endblock %}
+{% block addJS %} <script src={{asset('admin/js/category.js')}} defer></script> {% endblock %}

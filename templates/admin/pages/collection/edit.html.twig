@@ -1,0 +1,165 @@
+{% extends "admin/template.html.twig" %}
+{% block title %}- Collection{% endblock %}
+{% block body %}
+<main>
+    {% include "admin/_partials/_block_alert.html.twig" %}
+    <section class="hero-section">
+        <h1>Editer une collection</h1>
+        <div class="d-flex column-responsive">
+            <a href="{{path('admin_collection_list',{'slugCategory':category.slug})}}" class="btn btn-blue" id="btn-return"><i class=" feather-arrow-left"></i> Retour</a>
+            <a href="{{path('detail',{'slugCategory':category.slug,'slugCollection':collection.slug})}}" target="_blank" class="btn btn-orange mx-1" id="btn-view-collection"><i class="feather-eye"></i> Voir <span class="d-responsive-none">la collection</span></a>
+        </div>
+    </section>
+    <section>
+        <h2>Information de la collection</h2>
+        {{form_start(collectionForm)}}
+            <div class="container-input">
+                <div class="d-column">
+                    {{form_label(collectionForm.name)}}
+                    {{form_widget(collectionForm.name)}}
+                </div>
+                <div class="d-column">
+                    {{form_label(collectionForm.status)}}
+                    {{form_widget(collectionForm.status)}}
+                </div>
+                <div class="d-column">
+                    {{form_label(collectionForm.genreCollection)}}
+                    {{form_widget(collectionForm.genreCollection)}}
+                </div>
+            </div>
+            <div class="d-column mb-1">
+                {{form_label(collectionForm.description)}}
+                {{form_widget(collectionForm.description)}}
+            </div>
+            <div class="container-input my-2">
+                <div class="d-column">
+                    {{form_label(collectionForm.picture)}}
+                    {{form_widget(collectionForm.picture)}}
+                    {% if fileExists(collection.picture) and collection.picture is not null %}
+                        <img src="{{asset('uploads/' ~ collection.picture)}}" alt="image de {{collection.name}}" class="img-edit-collection" decoding="auto">
+                    {% else %}
+                        <p>Il n'y a pas encore d'image de présentation pour cette collection</p>
+                    {% endif %}
+                </div>
+                <div class="d-column">
+                    {{form_label(collectionForm.bgPicture)}}
+                    {{form_widget(collectionForm.bgPicture)}}
+                    {% if fileExists(collection.bgpicture) and collection.picture is not null %}
+                        <img src="{{asset('uploads/' ~ collection.bgpicture)}}" alt="image de {{collection.name}}" class="img-edit-collection" decoding="auto">
+                    {% else %}
+                        <p>Il n'y a pas encore d'image de fond pour cette collection</p>
+                    {% endif %}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-green">
+                <i class="feather-save"></i> Enregistré
+            </button>
+        {{form_end(collectionForm)}}
+    </section>
+    <section>
+        <h2>Les groupes associés</h2>
+        <div style="overflow-x:scroll">
+            <table>
+                    <thead>
+                        <tr>
+                            <th class="fx-13">Nom</th>
+                            <th class="fx-13" width="30%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for group in collection.groupTomes %}
+                            <tr>
+                                <td class="text-capitalize" id="{{group.id}}">{{ group.name }}</td>
+                                <td class="justify-end d-flex" id="btn-action-{{group.id}}">
+                                    <button onclick="editGroup('{{group.id}}','{{group.name}}')" class="btn btn-edit"><i class="feather-edit-2"></i> <span class="d-responsive-none">Editer</span></button>
+                                    <a href="{{path('admin_group_delete',{'idCollection':collection.id,'idGroup':group.id})}}" onclick="return confirm('Vous voulez vraiment supprimer ce groupe?')" class="btn btn-red"><i class="feather-trash-2"></i> <span class="d-responsive-none">Supprimer</span></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                            <tr id="formNewGroup">
+                                <td><input type="text" id="nameNewGroup"><input type="hidden" value="{{collection.id}}" id="idCollection"></td>
+                                <td class="text-right"><button id="addGroup" class="btn btn-green"><i class="feather-save"></i> Enregistré</button></td>
+                            </tr>
+                    </tbody>
+                </table>
+        </div>
+            <p id="erreurAddGroup" class="text-red"></p>
+    </section>
+    <section>
+        <h2>Les oeuvres associés</h2>
+            <div style="d-responsive-none">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="fx-13">Nom</th>
+                            <th class="fx-13 d-responsive-none">Ajouter le</th>
+                            <th class="fx-13 d-responsive-none">Modifier le</th>
+                            <th class="fx-13" width="30%" id="theadAction">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tome in collection.tomeCollections %}
+                            {% if tome.groupTome is null %}
+                                <tr>
+                                    <td class="text-capitalize" id="{{tome.id}}">{{ tome.name }}</td>
+                                    <td class="d-responsive-none">{{ tome.dateCreate|date('d/m/Y') }}</td>
+                                    <td class="d-responsive-none">{{ tome.dateModifie|date('d/m/Y') }}</td>
+                                    <td class="justify-end d-flex" id="btn-action-{{tome.id}}">
+                                        <button onclick="editTome('{{tome.id}}','{{tome.name}}')" class="btn btn-edit"><i class="feather-edit-2"></i> <span class="d-responsive-none">Editer</span></button>
+                                        <a href="{{path('admin_tome_delete',{'idCollection':collection.id,'idTome':tome.id})}}" onclick="return confirm('Vous voulez vraiment supprimer ce tome?')" class="btn btn-red"><i class="feather-trash-2"></i> <span class="d-responsive-none">Supprimer</span></a>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                            <tr id="formNewTome">
+                                <td><input type="text" id="nameNewTome"></td>
+                                <td class="d-responsive-none" colspan="2"></td>
+                                <td class="text-right"><button id="addTome" class="btn btn-green"><i class="feather-save"></i> Enregistré</button></td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p id="erreurAddTome" class="text-red"></p>
+    </section>
+    <section id="groupTome">
+        {% if collection.groupTomes|length > 0 %}
+            {% for groupTome in collection.groupTomes %}
+                <h2 id="section-{{groupTome.id}}">{{groupTome.name}}</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="fx-13">Nom</th>
+                            <th class="fx-13 d-responsive-none">Ajouter le</th>
+                            <th class="fx-13 d-responsive-none">Modifier le</th> 
+                            <th class="fx-13" width="30%" id="theadAction">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tome in groupTome.tomeCollection %}
+                            <tr>
+                                <td class="text-capitalize" id="{{tome.id}}">{{ tome.name }}</td>
+                                <td class="d-responsive-none">{{ tome.dateCreate|date('d/m/Y') }}</td>
+                                <td class="d-responsive-none">{{ tome.dateModifie|date('d/m/Y') }}</td>
+                                <td class="justify-end d-flex" id="btn-action-{{tome.id}}">
+                                    <button onclick="editTome('{{tome.id}}','{{tome.name}}')" class="btn btn-edit"><i class="feather-edit-2"></i> <span class="d-responsive-none">Editer</span></button>
+                                    <a href="{{path('admin_tome_delete',{'idCollection':collection.id,'idTome':tome.id})}}" onclick="return confirm('Vous voulez vraiment supprimer ce tome?')" class="btn btn-red"><i class="feather-trash-2"></i> <span class="d-responsive-none">Supprimer</span></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <tr id="form-{{groupTome.id}}">
+                            <td><input type="text" id="nameNewTome-{{groupTome.id}}"></td>
+                            <td class="d-responsive-none" colspan="2"></td>
+                            <td class="text-right"><button onclick="addTomeGroup('{{groupTome.id}}')" class="btn btn-green"><i class="feather-save"></i> Enregistré</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p id="erreurAddTome-{{groupTome.id}}" class="text-red"></p>
+            {% endfor %}
+        {% endif %}
+    </section>
+</main>
+{% endblock %}
+{% block addJS %} 
+<script src="{{asset('admin/js/collection.js')}}" defer></script> 
+<script src="{{asset('admin/js/groupTome.js')}}" defer></script> 
+{% endblock %}

@@ -1,0 +1,8 @@
+<section class="container">
+    <h2>{{ title }}</h2>
+    <div class="container-card-profil">
+        {% for info in infos %}
+            {% include "frontend/custom/_partials/_card_info.html.twig" with {'name':info['name'],'number':info['number']} %}
+        {% endfor %}
+    </div>
+</section>

@@ -1,0 +1,3 @@
+<div id="container-info-collection" class="border-information-collection {% if numberTomeUser == 0 %}border-collection-none{% endif %}{% if numberTomeUser == numberTomeCollection %}border-collection-complet{% endif %}{% if numberTomeUser > 0 and numberTomeCollection > numberTomeUser %}border-collection-wait{% endif %}">
+    <p id="numberTomeUser">{{numberTomeUser}} Tome{% if numberTomeUser > 1 %}s{% endif %} possédé{% if numberTomeUser > 1 %}s{% endif %}</p>
+</div>

@@ -1,0 +1,18 @@
+<h3>Recherche de collection</h3>
+{{form_start(form, {'attr': {'class': 'form-search'}}) }}
+    <div class="group-form mx-1">
+        {{form_label(form.nameCollection)}}
+        {{form_widget(form.nameCollection)}}
+    </div>
+    <div class="group-form mx-1">
+        {{form_label(form.genreCollection)}}
+        {{form_widget(form.genreCollection)}}
+    </div>
+    <div class="group-form mx-1">
+        {{form_label(form.category)}}
+        {{form_widget(form.category)}}
+    </div>
+    <div class="group-form">
+        <button class="btn btn-green">Rechercher</button>
+    </div>
+{{form_end(form)}}

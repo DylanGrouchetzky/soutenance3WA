@@ -1,0 +1,24 @@
+<footer>
+    <a href="{{path('home')}}"  aria-label="Retour à la page d'accueil">
+        <img src="{{asset(getLogo(parameterWebsite.logoWebsite))}}" alt="logo {{parameterWebsite.nameWebsite}}" id="logo-footer" class="logo-footer">
+    </a>
+        <ul class="list-footer" id="list-link-footer">
+            <li class="mx-1"><a href="{{path('home')}}" class="nav-item-footer">Accueil</a></li>
+             {% for categoryNav in categories %}
+                <li class="mx-1"><a href="{{path('category',{'slugCategory':categoryNav.slug})}}" class="nav-item-footer">{{categoryNav.name}}</a></li>
+            {% endfor %}
+            {% if app.user %}
+                <li class="mx-1"><a href="{{path('profil_home')}}" class="nav-item-footer">Profil</a></li>
+                <li class="mx-1"><a href="{{path('app_logout')}}" class="nav-item-footer">Déconnexion</a></li>
+            {% else %}
+                <li class="mx-1"><a href="{{path('app_login')}}" class="nav-item-footer">Connexion</a></li>
+                <li class="mx-1"><a href="{{path('app_register')}}" class="nav-item-footer">Inscription</a></li>
+            {% endif %}
+            <li class="mx-1"><a href="mailto:{{parameterWebsite.emailContact}}" target="_blank" class="nav-item-footer"><i class="feather-mail"></i> {{parameterWebsite.emailContact}}</a></li>
+            <li class="mx-1"><a href="{{path('politique_confidentialite')}}" target="_blank" class="nav-item-footer">Politique de confidentialité</a></li>
+        </ul>
+        <div class="d-flex align-center">
+            <a href="{{parameterWebsite.linkFacebook}}" target="_blank" class="btn-reseaux" aria-label="Lien vers page Facebook"><i class="feather-facebook"></i></a>
+            <a href="{{parameterWebsite.linkInstagram}}" target="_blank" class="btn-reseaux" aria-label="Lien vers page Instagram"><i class="feather-instagram"></i></a>
+        </div>
+</footer>

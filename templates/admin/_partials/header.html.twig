@@ -1,0 +1,19 @@
+{% set nameRoute = app.request.attributes.get('_route') %} 
+<header class="bg-white">
+    <nav class="d-flex justify-center" id="container-nav">
+        <button class="d-none btn btn-nav btn-close-nav" id="closeNav"><i class="feather-x"></i></button>
+        <button class="btn btn-nav" id="openNav"><i class="feather-menu"></i></button>
+        <ul class="d-flex d-responsive-none" id="list-nav-item">
+            <li class="mx-1"><a href="{{path('admin_home')}}" class="nav-item {% if nameRoute == 'admin_home' %} active {% endif %} ">Accueil</a></li>
+            <li class="mx-1"><a href="{{path('admin_user_list')}}" class="nav-item {% if nameRoute == 'admin_user_list' %} active {% endif %} ">Utilisateurs</a></li>
+            <li class="mx-1"><a href="{{path('admin_category_list')}}" class="nav-item {% if nameRoute == 'admin_category_list' or nameRoute == 'admin_category_add' or nameRoute == 'admin_category_edit' %} active {% endif %}">Catégorie</a></li>
+            {% for categoryNav in getCategoryList() %}
+                <li class="mx-1"><a href="{{path('admin_collection_list',{'slugCategory':categoryNav.slug})}}" class="nav-item {% if nameRoute == 'admin_collection_list' or nameRoute == 'admin_collection_add' or nameRoute == 'admin_collection_edit' %}{% if category.slug == categoryNav.slug %} active {% endif %}{% endif %}">{{categoryNav.name}}</a></li>
+            {% endfor %}
+            <li class="mx-1"><a href="{{path('admin_parameter_list')}}" class="nav-item {% if nameRoute == 'admin_parameter_list' %} active {% endif %} ">Paramétre</a></li>
+            <li class="mx-1"><a href="{{path('home')}}" class="nav-item">Retour au site</a></li>
+            <li class="mx-1"><a href="{{path('app_logout')}}" class="nav-item">Déconnexion</a></li>
+        </ul>
+    </nav>
+</header>
+<script src="{{asset('admin/js/header.js')}}" defer></script>

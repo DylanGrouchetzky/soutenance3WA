@@ -1,0 +1,58 @@
+{% extends "frontend/template.html.twig" %}
+{% block title %} - {{category.name}}{% endblock %}
+{% set descriptionMeta = "Retrouvez vos titres préférer parmi tous ceux présent pour cette catégorie en particulier. Vous trouverez forcément votre bonheur, nous rajoutons régulièrement de nouveau titre rien que pour vous." %}
+{% block meta %}
+    <meta name="description" content="{{descriptionMeta}}">
+    <meta property="og:description" content="{{descriptionMeta}}">
+    <meta property="og:title" content="{{parameterWebsite.nameWebsite}} - {{category.name}}">
+{% endblock %}
+{% block body %}
+    {% if fileExists(category.picture) and category.picture is not null %}
+        <section class="bg-category d-flex justify-center align-end" style="background-image:url('{{asset('uploads/' ~ category.picture )}}')">
+    {% else %}
+        <section class="bg-category d-flex justify-center align-end"
+        {% if category.slug == 'manga' %}style="background-image:url('{{asset('img/bandeau-manga.webp')}}')"{% endif %}
+        {% if category.slug == 'livre' %}style="background-image:url('{{asset('img/bandeau-livre.webp')}}')"{% endif %}>
+    {% endif %}
+        <h1>{{category.name}}</h1>
+    </section>
+    <main>
+        <nav class="breadcrumb"><a href="{{path('home')}}" class="breadcrumb-link">Accueil</a> / {{category.name}}</nav>
+        <h2>{{category.name}}</h2>
+        <section class="container">
+            {% include "frontend/_partials/_form_search.html.twig" with {'form':searchForm} %}
+            {% include "frontend/_partials/_alert_message.html.twig" %}
+            <div class="container-card-collection">
+            {% if collections|length > 0 %}
+                {% for collection in collections %}
+                    {% include "frontend/_partials/_card_collection.html.twig" with {'collection':collection,'category':category} %}
+                {% endfor %}
+            {% else %}
+                <p>Désolé aucune collection n'est encore enregistrée pour cette catégorie</p>
+            {% endif %}
+            </div>
+            {% if nextCollections or start > 0 %}
+                <div class="d-flex justify-center flex-wrap">
+                    {% if start > 0 %}
+                        <a href="{{path('category',{'slugCategory':category.slug,'start':start - limit})}}" class="btn btn-crimson mx-1"><i class=" feather-arrow-left"></i></a>
+                    {% else %}
+                        <button class="btn btn-crimson-disabled mx-1"><i class=" feather-arrow-left"></i></button>
+                    {% endif %}
+                    {% for numberPagination in 1..numberPaginations %}
+                        {% set numberStart = limit * (numberPagination - 1) %}
+                        {% if start == numberStart %}
+                            <button class="btn btn-crimson-disabled mx-1">{{numberPagination}}</button>
+                        {% else %}
+                            <a href="{{path('category',{'slugCategory':category.slug,'start':limit * (numberPagination - 1)})}}" class="btn btn-crimson mx-1">{{numberPagination}}</a>
+                        {% endif %}
+                    {% endfor %}
+                    {% if nextCollections %}
+                        <a href="{{path('category',{'slugCategory':category.slug,'start':start + limit})}}" class="btn btn-crimson mx-1"><i class="feather-arrow-right"></i></a>
+                    {% else %}
+                        <button class="btn btn-crimson-disabled mx-1"><i class=" feather-arrow-right"></i></button>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </section>
+    </main>
+{% endblock %}

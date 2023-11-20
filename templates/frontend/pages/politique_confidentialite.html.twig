@@ -1,0 +1,56 @@
+{% extends "frontend/template.html.twig" %}
+{% block title %} - Politique de confidentialité {% endblock %}
+{% set descriptionMeta = "Super Collect vous permet de gérer votre collection en toute simplicité et efficacité. Grâce à Super Collect vous seriez où vous en êtes dans votre collection préférer et vous éviterez d'acheter des livres en double." %}
+{% block meta %}
+    <meta name="description" content="{{descriptionMeta}}">
+    <meta property="og:description" content="{{descriptionMeta}}">
+    <meta property="og:title" content="{{parameterWebsite.nameWebsite}} - Gérer vos collections">
+{% endblock %}
+{% block body %}
+    <section class="bg-hero" style="background-image:url('{{asset(getImgHeroSection(parameterWebsite.imgHeroSectionHome))}}')">
+        <h1>{{parameterWebsite.nameWebsite}}</h1>
+    </section>
+    <main>
+        <section class="container">
+            <h2 class="mb-2">Politique de confidentialité</h2>
+            <p>Date d'entrée en vigueur : 19 Novembre 2023</p>
+            <p>
+                Bienvenue sur {{parameterWebsite.nameWebsite}}. <br> 
+                La protection de vos données personnelles est une priorité pour nous. Cette politique de confidentialité explique comment nous collectons, 
+                utilisons, et protégeons les informations que vous nous fournissez lorsque vous utilisez notre site.
+            </p>
+            <h3>Collecte d'Informations</h3>
+            <p>
+                Nous collectons uniquement votre adresse e-mail lorsque vous la fournissez volontairement, lors de la création d'un compte.
+            </p>
+            <h3>Utilisation des Informations</h3>
+            <p>
+                Nous utilisons votre adresse e-mail pour vous permettre d'enregistrer vos collections, vous envoyer des informations relatives à nos services, des mises à jour. <br>
+                Vous avez la possibilité de vous désinscrire à tout moment en nous envoyant un e-mail de demande de suppresion de vos toute vos données.
+            </p>
+            <h3>Cookies et PHP Session ID</h3>
+            <p>
+                Nous utilisons un cookie, le PHP session ID, pour assurer le bon fonctionnement de notre site. <br> 
+                Le PHP session ID est essentiel pour maintenir votre session active pendant que vous naviguez sur notre site. Ce cookie ne collectent aucune information personnelle identifiable.
+            </p>
+            <h3>Protection des Informations</h3>
+            <p>
+                La sécurité de vos informations, y compris votre adresse e-mail, est une priorité pour nous. <br> 
+                Nous mettons en place des mesures de sécurité techniques, administratives et physiques pour protéger vos données contre tout accès non autorisé, divulgation, altération et destruction.
+            </p>
+            <h3>Partage d'Informations</h3>
+            <p>
+                Nous ne vendons, n'échangeons ni ne louons vos informations à des tiers, sauf dans les cas prévus par la loi.
+            </p>
+            <h3>Modifications de la Politique de Confidentialité</h3>
+            <p>
+                Nous nous réservons le droit de mettre à jour cette politique de confidentialité à tout moment. Les modifications seront publiées sur cette page avec la nouvelle date d'entrée en vigueur.
+            </p>
+            <h3>Contact</h3>
+            <p>
+                Si vous avez des questions concernant notre politique de confidentialité, veuillez nous contacter à <a href="mailto:contact@super-collect.fr" target="_blank">contact@super-collect.fr</a>. <br>
+                En utilisant notre site, vous acceptez les termes de cette politique de confidentialité.
+            </p>
+        </section>
+    </main>
+{% endblock %}

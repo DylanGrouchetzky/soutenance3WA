@@ -1,0 +1,24 @@
+{% set nameRoute = app.request.attributes.get('_route') %} 
+<header class="p-absolute bg-white-trans w-100" >
+    <nav class="navbar-content" id="container-nav">
+        <button class="d-none btn btn-close-nav" id="closeNav"><i class="feather-x"></i></button>
+        <button class="btn btn-open-nav" aria-label="Ouverture navigation" id="openNav"><i class="feather-menu"></i></button>
+        <a href="{{path('home')}}" aria-label="Retour à la page d'accueil">
+            <img src="{{asset(getLogo(parameterWebsite.logoWebsite))}}" alt="Logo {{parameterWebsite.nameWebsite}}" class="nav-logo" id="logo-nav">
+        </a>
+        <ul class="d-flex d-none-response" id="list-nav-item">
+            <li><a class="nav-link {% if nameRoute == "home" %} active {% endif %}" href="{{path('home')}}">Accueil</a></li>
+            {% for categoryNav in categories %}
+                <li><a class="nav-link {% if nameRoute == "category" or nameRoute == "detail" or nameRoute == 'category_pagination' %}{% if category is defined and category.slug == categoryNav.slug %} active {% endif %}{% endif %}" href="{{path('category',{'slugCategory':categoryNav.slug})}}">{{categoryNav.name}}</a></li>
+            {% endfor %}
+            {% if app.user %}
+                <li><a class="nav-link {% if nameRoute == "profil_home" %} active {% endif %}" href="{{path('profil_home')}}">Profil</a></li>
+                <li><a class="nav-link" href="{{path('app_logout')}}">Déconnexion</a></li>
+            {% else %}
+                <li><a class="nav-link {% if nameRoute == "app_login" %} active {% endif %}" href="{{path('app_login')}}">Connexion</a></li>
+                <li><a class="nav-link {% if nameRoute == "app_register" %} active {% endif %}" href="{{path('app_register')}}">Inscription</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+<script src="{{asset('frontend/js/header.js')}}" defer></script>

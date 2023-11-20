@@ -1,0 +1,28 @@
+{% extends "frontend/template.html.twig" %}
+{% block title %} - Recherche{% endblock %}
+{% block meta %}
+    <meta name="description" content="Rechercher vos titres préférer parmi tout ceux présent sur notre site. Vous trouverez forcément votre bonheur, nous rajoutons régulièrement de nouveaux titre rien que pour vous.">
+    <meta property="og:description" content="Rechercher vos titres préférer parmi tout ceux présent sur notre site. Vous trouverez forcément votre bonheur, nous rajoutons régulièrement de nouveaux titre rien que pour vous.">
+    <meta property="og:title" content="{{parameterWebsite.nameWebsite}} - Recherche">
+{% endblock %}
+{% block body %}
+    <section class="bg-search d-flex justify-end align-end">
+        <h1>Recherche</h1>
+    </section>
+    <main class="py-2">
+        <nav class="breadcrumb"><a href="{{path('home')}}" class="breadcrumb-link">Accueil</a> / Recherche</nav>
+        <h2>Résultat de la recherche</h2>
+        <section class="container">
+            {% include "frontend/_partials/_form_search.html.twig" with {'form':searchForm} %}
+            <div class="container-card-collection">
+                {% if collections|length > 0 %}
+                    {% for collection in collections|sort((a, b) => a.name <=> b.name) %}
+                        {% include "frontend/_partials/_card_collection.html.twig" with {'collection':collection,'category':collection.categoryCollection} %}
+                    {% endfor %}
+                {% else %}
+                  <p>Aucun résultat trouvé pour cette recherche</p> 
+                {% endif %}
+            </div>
+        </section>
+    </main>
+{% endblock %}

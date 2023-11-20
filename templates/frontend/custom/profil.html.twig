@@ -1,0 +1,69 @@
+{% extends "frontend/template.html.twig" %}
+{% block title %} - Profil{% endblock %}
+{% block body %}
+    <section class="bg-profil d-flex justify-end align-end">
+        <h1>Profil</h1>
+    </section>
+    <main>
+        {% include "frontend/custom/_partials/_block_info.html.twig" with {'title':"Information de vos collections", 'infos':infosCollections} %}
+        {% include "frontend/custom/_partials/_block_info.html.twig" with {'title':"Information de vos tomes", 'infos':infosTomes} %}
+        <section class="container p-05">
+            {% if collections|length > 0 %}
+                <h2>Liste des collections possédées</h2>
+                <div class="container-collection-profil">
+                    {% for collection in collections %}
+                        <div class="card-collection-profil">
+                            {% if fileExists(collection.collectionLibrary.picture) and collection.collectionLibrary.picture is not null %}
+                                <img src="{{asset('uploads/' ~ collection.collectionLibrary.picture)}}" alt="image de {{collection.collectionLibrary.name}}" class="img-card-profil" decoding="auto">
+                            {% else %}
+                                <img src="{{asset('img/tome-default.webp')}}" alt="image de {{collection.collectionLibrary.name}}" class="img-card-profil" decoding="auto">
+                            {% endif %}
+                            <div class="d-flex flex-column justify-center">
+                                <p class="text-center">{{collection.collectionLibrary.name}}</p>
+                                {% set numberTomeUser = getNumberTomeUser(app.user,collection.collectionLibrary) %}
+                                <p class="text-center">{{numberTomeUser}} Tome{% if numberTomeUser > 1 %}s{% endif %} / {{collection.collectionLibrary.numberTome}} Tome{% if collection.collectionLibrary.numberTome > 1 %}s{% endif %}</p>
+                                {% if getPourcentTome(numberTomeUser,collection.collectionLibrary.numberTome) == 100 %}
+                                    <progress class="progresse-bar-complet" max="100" value="{{getPourcentTome(numberTomeUser,collection.collectionLibrary.numberTome)}}">{{getPourcentTome(numberTomeUser,collection.collectionLibrary.numberTome)}}</progress>
+                                {% else %}
+                                    <progress class="progresse-bar-progress" max="100" value="{{getPourcentTome(numberTomeUser,collection.collectionLibrary.numberTome)}}">{{getPourcentTome(numberTomeUser,collection.collectionLibrary.numberTome)}}</progress>
+                                {% endif %}
+                            </div>
+                            <a href="{{path('detail',{'slugCategory':collection.categoryCollection.slug,'slugCollection':collection.collectionLibrary.slug})}}" class="btn btn-small btn-green"><i class="feather-eye"></i> Voir</a>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                    <p>Vous n'avez pas encore de collection enregistré</p>
+                {% endif %}
+        </section>
+        <section class="container p-05">
+            {% if collections|length > 0 %}
+                <h2>Liste des collections lus</h2>
+                <div class="container-collection-profil">
+                    {% for collection in collections %}
+                        <div class="card-collection-profil">
+                            {% if fileExists(collection.collectionLibrary.picture) and collection.collectionLibrary.picture is not null %}
+                                <img src="{{asset('uploads/' ~ collection.collectionLibrary.picture)}}" alt="image de {{collection.collectionLibrary.name}}" class="img-card-profil" decoding="auto">
+                            {% else %}
+                                <img src="{{asset('img/tome-default.webp')}}" alt="image de {{collection.collectionLibrary.name}}" class="img-card-profil" decoding="auto">
+                            {% endif %}
+                            <div class="d-flex flex-column justify-center">
+                                <p class="text-center">{{collection.collectionLibrary.name}}</p>
+                                {% set numberTomeUser = getNumberTomeUserRead(app.user,collection.collectionLibrary) %}
+                                <p class="text-center">{{numberTomeUser}} Tome{% if numberTomeUser > 1 %}s{% endif %} / {{collection.collectionLibrary.numberTome}} Tome{% if collection.collectionLibrary.numberTome > 1 %}s{% endif %}</p>
+                                {% if getPourcentTome(numberTomeUser,collection.collectionLibrary.numberTome) == 100 %}
+                                    <progress class="progresse-bar-complet" max="100" value="{{getPourcentTome(numberTomeUser,collection.collectionLibrary.numberTome)}}">{{getPourcentTome(numberTomeUser,collection.collectionLibrary.numberTome)}}</progress>
+                                {% else %}
+                                    <progress class="progresse-bar-progress" max="100" value="{{getPourcentTome(numberTomeUser,collection.collectionLibrary.numberTome)}}">{{getPourcentTome(numberTomeUser,collection.collectionLibrary.numberTome)}}</progress>
+                                {% endif %}
+                            </div>
+                            <a href="{{path('detail',{'slugCategory':collection.categoryCollection.slug,'slugCollection':collection.collectionLibrary.slug})}}" class="btn btn-small btn-green"><i class="feather-eye"></i> Voir</a>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                    <p>Vous n'avez pas encore de collection enregistré</p>
+                {% endif %}
+        </section>
+    </main>
+{% endblock %}

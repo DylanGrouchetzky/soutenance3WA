@@ -1,0 +1,39 @@
+{% extends "admin/template.html.twig" %}
+{% block title %}- Collections{% endblock %}
+{% block body %}
+<main>
+    {% include "admin/_partials/_block_alert.html.twig" %}
+    <section class="hero-section">
+        <h1>Gestion des Collections</h1>
+        <a href="{{path('admin_collection_add',{'slugCategory':category.slug})}}" class="btn btn-blue" id="btn-add"><i class="feather-plus"></i> Ajouter <span class="d-responsive-none">une collection</span></a>
+    </section>
+    <section style="overflow-x:scroll">
+        {% if collections|length > 0 %}
+            <table>
+                <thead>
+                    <tr>
+                        <th class="fx-13">Nom</th>
+                        <th class="fx-13 d-responsive-none">Nombre de tome</th>
+                        <th class="fx-13">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for collection in collections|sort((a, b) => a.name <=> b.name) %}
+                        <tr>
+                            <td class="text-capitalize"><a href="{{path('admin_collection_edit',{'slugCategory':category.slug,'slugCollection':collection.slug})}}">{{ collection.name }}</a></td>
+                            <td class="d-responsive-none">{{ collection.numberTome }}</td>
+                            <td class="justify-end d-flex">
+                                <a href="{{path('admin_collection_edit',{'slugCategory':category.slug,'slugCollection':collection.slug})}}" class="btn btn-edit"><i class="feather-edit"></i> <span class="d-responsive-none">Editer</span></a>
+                                <a href="{{path('admin_collection_delete',{'idCategory':category.id,'idCollection':collection.id})}}" onclick="return confirm('Vous voulez vraiment supprimer cette collection?')" class="btn btn-red"><i class="feather-trash-2"></i> <span class="d-responsive-none">Supprimer</span></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Il n'y a pas encore de collections enregistré pour cette catégorie</p>
+        {% endif %} 
+    </section>
+</main>
+{% endblock %}
+{% block addJS %} <script src={{asset('admin/js/collection.js')}} defer></script> {% endblock %}

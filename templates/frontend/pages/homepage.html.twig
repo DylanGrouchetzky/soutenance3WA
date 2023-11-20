@@ -1,0 +1,38 @@
+{% extends "frontend/template.html.twig" %}
+{% block title %} - Gérer vos collections{% endblock %}
+{% set descriptionMeta = "Super Collect vous permet de gérer votre collection en toute simplicité et efficacité. Grâce à Super Collect vous seriez où vous en êtes dans votre collection préférer et vous éviterez d'acheter des livres en double." %}
+{% block meta %}
+    <meta name="description" content="{{descriptionMeta}}">
+    <meta property="og:description" content="{{descriptionMeta}}">
+    <meta property="og:title" content="{{parameterWebsite.nameWebsite}} - Gérer vos collections">
+{% endblock %}
+{% block body %}
+    <section class="bg-hero" style="background-image:url('{{asset(getImgHeroSection(parameterWebsite.imgHeroSectionHome))}}')">
+        <h1>{{parameterWebsite.nameWebsite}}</h1>
+    </section>
+    <main>
+        <section class="container">
+            <h2 class="mb-2">Qu'est ce que Super Collect ?</h2>
+            <p>{{parameterWebsite.textDetailWebsite|raw}}</p>
+        </section>
+        <section class="container">
+            {% include "frontend/_partials/_alert_message.html.twig" %}
+            <h2 class="mb-2">Les derniers ajouts</h2>
+            {% for categorie in categories %}
+                {% if categorie.collectionLibraries|length > 0 %}
+                    <section class="my-3">
+                        <ul class="d-flex justify-space-between">
+                            <li><a href="{{path('category',{'slugCategory':categorie.slug})}}" class="title-category"><i class="feather-book-open"></i> {{categorie.name}}</a></li>
+                            <li><a href="{{path('category',{'slugCategory':categorie.slug})}}" class="btn btn-crimson"><i class="feather-eye"></i> Tout voir</a></li>
+                        </ul>
+                        <div class="container-card-collection">
+                            {% for collection in getLastCollection(categorie.slug) %}
+                                {% include "frontend/_partials/_card_collection.html.twig" with {'collection':collection,'category':categorie} %}
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% endif %}
+            {% endfor %}
+        </section>
+    </main>
+{% endblock %}
