@@ -50,7 +50,7 @@ php bin/console d:m:m
 ```
 5.Ensuite pour joué les fausses donnée présente ;
 ```php
-php bin/onsole d:f:l
+php bin/console d:f:l
 ```
 
 ## 4 - Lancer le projet

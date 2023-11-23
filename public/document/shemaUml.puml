@@ -1,0 +1,75 @@
+@startuml SuperCollect
+
+class CollectionLibrary {
+  + collectionLibraryId
+  name
+  status
+  numberTome
+  description
+  slug
+  dateCreate
+  dateModifie
+  picture
+  bgPicture
+}
+
+class GenreCollection {
+  + genreCollectionId
+  name
+  dateCreate
+  dateModifie
+  categoryCollection
+  slug
+}
+
+class TomeCollection {
+  + tomeCollectionId
+  name
+  dateCreate
+  dateModifie
+  slug
+}
+
+class GroupTome {
+  + groupTomeId
+  name
+  slug
+}
+
+class CategoryCollection {
+  + categoryId
+  name
+  dateCreate
+  dateModifie
+  slug
+  picture
+}
+
+class User {
+  + userId
+  email
+  password
+  dateCreated
+  lastConnect
+}
+
+class ParameterWebsite {
+  + parameterId
+  nameWebsite
+  imgHeroSectionHome
+  logoWebsite
+  linkFacebook
+  linkInstagram
+  emailContact
+  textDetailWebsite
+}
+
+User "0..n" -left-o "1" CollectionLibrary
+User "0..n" --o "1" TomeCollection
+TomeCollection "0..n" --o "1" CollectionLibrary
+TomeCollection "0..n" --o "1" GroupTome
+GenreCollection "0..n" --o "1" CategoryCollection
+CollectionLibrary "0..n" --o "1" CategoryCollection
+GroupTome "0..n" --o "1" CollectionLibrary
+
+@enduml

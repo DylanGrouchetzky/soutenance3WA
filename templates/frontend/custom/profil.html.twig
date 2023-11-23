@@ -11,7 +11,7 @@
             {% if collections|length > 0 %}
                 <h2>Liste des collections possédées</h2>
                 <div class="container-collection-profil">
-                    {% for collection in collections %}
+                    {% for collection in collections|sort((a, b) => a.collectionLibrary.name <=> b.collectionLibrary.name) %}
                         <div class="card-collection-profil">
                             {% if fileExists(collection.collectionLibrary.picture) and collection.collectionLibrary.picture is not null %}
                                 <img src="{{asset('uploads/' ~ collection.collectionLibrary.picture)}}" alt="image de {{collection.collectionLibrary.name}}" class="img-card-profil" decoding="auto">

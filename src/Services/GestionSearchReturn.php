@@ -3,12 +3,15 @@
 namespace App\Services;
 
 use App\Repository\CollectionLibraryRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class GestionSearchReturn{
 
     private $collectionRepository;
-    public function __construct(CollectionLibraryRepository $collectionLibraryRepository){
+    private $params;
+    public function __construct(CollectionLibraryRepository $collectionLibraryRepository,ParameterBagInterface $params){
         $this->collectionRepository = $collectionLibraryRepository;
+        $this->params = $params;
     }
 
     public function gestionsData($dataForm){
@@ -31,7 +34,7 @@ class GestionSearchReturn{
         return $data;
     }
 
-    public function searchResult($termSearch,$categorySearch,$genreSearch){
+    public function searchResult($termSearch,$categorySearch,$genreSearch,$start,$verif = null,$total = true){
         if ($termSearch == "toute-collection") {
             $termSearch = "";
         }
@@ -39,6 +42,13 @@ class GestionSearchReturn{
         $queryBuilder = $this->collectionRepository->createQueryBuilder('co')
             ->Where('co.name LIKE :name')
             ->setParameter('name', '%'.$termSearch.'%');
+           
+        if ($verif) {
+            $queryBuilder->setFirstResult($this->params->get('limit_pagination') + $start)
+            ->setMaxResults($this->params->get('limit_pagination'));
+        }elseif ($total != true) {
+            $queryBuilder->setFirstResult($start)->setMaxResults($this->params->get('limit_pagination'));
+        }
 
         if ($categorySearch != "tout" ) {
             $queryBuilder
@@ -52,7 +62,7 @@ class GestionSearchReturn{
             ->andWhere('g.id = :genreCollection')
             ->setParameter('genreCollection', $genreSearch);
         }
-        
+
         return $queryBuilder->getQuery()->getResult();
     }
 }

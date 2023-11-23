@@ -23,6 +23,28 @@
                   <p>Aucun résultat trouvé pour cette recherche</p> 
                 {% endif %}
             </div>
+            {% if nextCollections or start > 0 %}
+                <div class="d-flex justify-center flex-wrap">
+                    {% if start > 0 %}
+                        <a href="{{path('search_collection',{'termSearch':termSearch,'categorySearch':categorySearch,'genreSearch':genreSearch,'start':start - limit}) }}" class="btn btn-crimson mx-1"><i class=" feather-arrow-left"></i></a>
+                    {% else %}
+                        <button class="btn btn-crimson-disabled mx-1"><i class=" feather-arrow-left"></i></button>
+                    {% endif %}
+                    {% for numberPagination in 1..numberPaginations %}
+                        {% set numberStart = limit * (numberPagination - 1) %}
+                        {% if start == numberStart %}
+                            <button class="btn btn-crimson-disabled mx-1">{{numberPagination}}</button>
+                        {% else %}
+                            <a href="{{path('search_collection',{'termSearch':termSearch,'categorySearch':categorySearch,'genreSearch':genreSearch,'start':limit * (numberPagination - 1)}) }}" class="btn btn-crimson mx-1">{{numberPagination}}</a>
+                        {% endif %}
+                    {% endfor %}
+                    {% if nextCollections %}
+                        <a href="{{path('search_collection',{'termSearch':termSearch,'categorySearch':categorySearch,'genreSearch':genreSearch,'start':start + limit}) }}" class="btn btn-crimson mx-1"><i class="feather-arrow-right"></i></a>
+                    {% else %}
+                        <button class="btn btn-crimson-disabled mx-1"><i class=" feather-arrow-right"></i></button>
+                    {% endif %}
+                </div>
+            {% endif %}
         </section>
     </main>
 {% endblock %}
