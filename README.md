@@ -40,7 +40,7 @@ Une fois composer installé et mis à jour ils vous faudra faire :
 
 1. Copier le fichier " .env " et le renomer " .env.local " 
 2. Modifier la variable de " #DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/baseDeDonnee" avec vos donnée de connection MySql(nom d'utilisateur, mot de passe et nom de la base de données)
-3. Taper la commande suivante dans le terminal pour créé la base de donnée:
+3. Taper la commande suivante dans le terminal pour créé la base de donnée et accepter la demande :
 ```php
 php bin/console d:d:c
 ```
@@ -48,7 +48,7 @@ php bin/console d:d:c
 ```php
 php bin/console d:m:m
 ```
-5.Ensuite pour joué les fausses donnée présente ;
+5.Ensuite pour joué les fausses donnée présente et accepter la demande :
 ```php
 php bin/console d:f:l
 ```
@@ -59,3 +59,14 @@ php bin/console d:f:l
 ```php 
 symfony server:start 
 ```
+
+## 5 - Document Lier au projet 
+
+Vous pouvez retrouvez tout les documents liées au projet dans le dossier public/document
+Vous y retrouvez :
+
+1. Le dossier Wireframe qui contient les wiframes de la page d'acueil ainsi que la page catégorie et la page de détail
+
+2. Le fichier PDF de la présentation de la soutenance
+
+3. Le shéma UML de la base de donnée du projet
